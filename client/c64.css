@@ -1,0 +1,25 @@
+@CHARSET "ISO-8859-1";
+body {
+	background-color:#a5a5ff;
+	font-family:"c64";
+	color:#a5a5ff;
+}
+#terminal {
+	padding:12px;
+	position:absolute;
+	top: 50%;
+	left: 50%;
+	width:50em;
+	height:30em;
+	margin-top: -15em; /*set to a negative number 1/2 of your height*/
+	margin-left: -25em; /*set to a negative number 1/2 of your width*/ 
+	background-color:#4242e7;
+}
+@font-face {
+	font-family: 'c64';
+	src: url('C64_Pro_Mono_v1.0-STYLE.eot');
+	src: url('C64_Pro_Mono_v1.0-STYLE.eot?#iefix') format('embedded-opentype'),
+		 url('C64_Pro_Mono_v1.0-STYLE.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}

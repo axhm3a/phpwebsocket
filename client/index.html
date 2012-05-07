@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html style="height:100%;">
+<head>
+<meta charset="ISO-8859-1">
+<link type="text/css" rel="stylesheet" href="c64.css"/>
+<title>C64</title>
+<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+<script>
+var context = $("#terminal");
+
+var str = 'HELLO, THIS IS A SIMPLE TEST.';
+var line = new Array();
+
+for(i = 0; i < str.length; i++) {
+	line.push(str[i]);
+}
+line.reverse();
+
+var write = function() {
+	$("#terminal").html($("#terminal").html() + line.pop());
+	if (line.length > 0)
+	{
+		//console.log(line);
+
+		setTimeout ('write()',100);
+	}
+}
+
+$(document).ready( function(){
+	
+	//write();
+	
+	$(document).bind('keypress',function(event) {
+		console.log(event.charCode);
+		//if(event.charCode == 0)
+		//{
+		//	$("#terminal").html($("#terminal").html() + "<br />");
+		//}
+		//else {
+		//	$("#terminal").html($("#terminal").html() + String.fromCharCode(event.charCode));
+		//}
+		if(event.charCode == 0 || event.charCode == 13) {
+			send("<br />");
+		}
+		else {
+			send(String.fromCharCode(event.charCode));
+		}
+	});
+	
+	init()
+});
+
+</script>
+
+<script>
+var socket;
+
+function init(){
+  var host = "ws://CONTENT6818:12346/phpwebsocket/server/server.php";
+  try{
+
+	  if ("WebSocket" in window)
+	  {
+		  socket = new WebSocket(host);
+	  }
+	  else if ("MozWebSocket" in window)
+	  {
+		  socket = new MozWebSocket(host);
+	  }
+    //socket = new MozWebSocket(host);
+    $("#terminal").html($("#terminal").html() + 'STATUS \"'+socket.readyState + "\"<br />");
+    
+    
+    
+    socket.onopen    = function(msg){ $("#terminal").html($("#terminal").html() + "STATUS \"" + this.readyState + "\"<br />"); };
+    socket.onmessage = function(msg){ $("#terminal").html($("#terminal").html() + msg.data); };
+    socket.onclose   = function(msg){ $("#terminal").html($("#terminal").html() + "STATUS \""+this.readyState + "\"<br />"); };
+  }
+  catch(ex){ $("#terminal").html($("#terminal").html() + "<br /> " + ex)}
+}
+
+function send(msg){
+  try{ socket.send(msg); } catch(ex){ log(ex); }
+}
+function quit(){
+	$("#terminal").html($("#terminal").html() + "<br />Goodbye!");
+  	socket.close();
+  	socket=null;
+}
+</script>
+
+</head>
+<body style="">
+<div id="terminal">
+</div>
+</body>
+</html>
